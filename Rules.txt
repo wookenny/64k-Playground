@@ -1,0 +1,11 @@
+Demo, Linux
+The machine will run Ubuntu Gutsy (latest version as of sometime in the party) with the latest Linux 2.6.x kernel (ie. hand in your entry as a .tar.gz, .tar.bz2 or .zip file via the party system (no RPMs etc.)).
+In case of a GeForce card: We'll use the latest OpenGL and display drivers from nVidia. In case of an ATI Radeon: We'll use the latest standard drivers for ATI. In other words, don't rely on proprietary OpenGL extensions to make your demo run, stick to ARB and EXT ones. Dynamic linking to libGL.so is recommended, since at least nVidia doesn't use DRI.
+You may freely link dynamically to the following libraries in addition to system libraries (that is, libc/libm, libpthread, and in general everything that's included with a base Debian install): Xlib (with DGA2), SDL, OpenPTC, OpenGL (including libGLU), GLUT, libvorbis (including libvorbisfile and libogg), libpng, libjpeg, zlib, bz2lib. None of these will be counted towards your size, which could be rather important in the 64k intro compo. We recommend that you link in everything else statically, or at least include the library with your entry.
+No direct sound access. Use of OSS, ALSA or ESD is allowed.
+Source is welcome, but of course not a requirement. Bring your sources with you, though, in case you need to recompile or fix something
+
+64k Intro
+You may contribute with either Amiga, Mac, Java, Win32, .NET or Linux intro. We will of course clearly state the platform prior to showing each intro.
+Max size for the 64k intro is 65536 bytes. Directories are not counted towards the final size for the Macintosh entries.
+Apart from the altered size limit, all rules from the normal demo compo apply.
