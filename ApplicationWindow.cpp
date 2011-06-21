@@ -30,7 +30,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //----------------------------------------------------------------------
 
-#include "application_window.h"
+#include "ApplicationWindow.h"
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
