@@ -1,0 +1,6 @@
+Not much to see here.
+I'm playing around with some opengl code to get nice images in
+ binaries with less than 64k bytes.
+
+Next thing is to generate all kinds of textures via compsoing them with basic images
+and simple operations.
