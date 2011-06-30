@@ -11,13 +11,12 @@ class Image{
 
 private:
 	std::vector<std::vector<Color> > _data;	
-
-	static real _gamma;
-
+	
 	void gammaCorrection();
 	void exposureCorrection();
 
 public:	
+	static real _gamma;
 
 	//constructors
 	Image(unsigned int width = 800,unsigned int height = 600);
@@ -52,17 +51,19 @@ public:
 	std::vector<std::vector<bool> > findEdges() const;
 
 	//static image factory methods:
-	static Image createSolidColor(unsigned int n = 800, unsigned int m = 600, const Color &c = Color(0,0,0)){
-		Image img = Image(n,m);
-		for(unsigned int i=0; i<img._data.size();++i)
-			for(unsigned int j=0; j<img._data.at(i).size();++j)
-				img.at(i,j) =  c;
-		return img;
-	}
 	//solid, gradient, random, simplex noise, perlin noise, circles, rectangles, 
-	//checker board, sinus(linear, radial)
-	
+	//checker board, sinus(linear, radial)	
+	static Image createSolidColor(unsigned int n = 800, unsigned int m = 600, const Color &c = Color::BLACK);
+	static Image createCheckersBoard(unsigned int n = 800, unsigned int m = 600, 
+					const Color &c1 = Color(0,0,0), const Color &c2 = Color::WHITE,
+					unsigned int period1 = 100, unsigned int period2 = 100 );	
+	static Image createLinearGradient(unsigned int n = 800, unsigned int m = 600, 
+					unsigned int x1 = 0, unsigned int y1 = 0, 
+					unsigned int x2 = 0, unsigned int y2 = 100,
+					const Color &c1 = Color::WHITE, const Color &c2 = Color::BLACK);
 	//static mask factory methods:
-	
+	static std::vector<std::vector<float> > createSolidColorMask(unsigned int n = 800, unsigned int m = 600, real alpha = 0.5);
+
 };
+
 

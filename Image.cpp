@@ -106,4 +106,45 @@ std::vector<std::vector<bool> > Image::findEdges() const{
 	return edges;
 }
 
+/*****------------- Image Factory Methods -----------------------------------*****/
+Image Image::createSolidColor(unsigned int n, unsigned int m, const Color &c){
+	Image img = Image(n,m);
+	for(unsigned int i=0; i<img._data.size();++i)
+		for(unsigned int j=0; j<img._data.at(i).size();++j)
+			img.at(i,j) =  c;
+	return img;
+}
+
+Image Image::createCheckersBoard(unsigned int n, unsigned int m, 
+					const Color &c1, const Color &c2,
+					unsigned int period1, unsigned int period2){
+	Image img = Image(n,m);
+	for(unsigned int i=0; i<img._data.size();++i)
+		for(unsigned int j=0; j<img._data.at(i).size();++j){
+			unsigned int color = ((int)(1.*i/period1)+(int)(1.*j/period2))%2;		
+			img.at(i,j) = (color==0)?c1:c2;
+		}
+	return img;
+}
+
+Image Image::createLinearGradient(unsigned int n, unsigned int m, unsigned int x1, unsigned int y1, 
+					unsigned int x2, unsigned int y2, const Color &c1, const Color &c2){
+	Image img = Image(n,m);
+	for(unsigned int i=0; i<img._data.size();++i)
+		for(unsigned int j=0; j<img._data.at(i).size();++j){
+			img.at(i,j) = c1;
+		}
+	return img;
+}
 	
+/*****------------- Mask Factory Methods -----------------------------------*****/
+std::vector<std::vector<float> > Image::createSolidColorMask(unsigned int n, unsigned int m, real alpha){
+	std::vector<std::vector<float> > mask; 	
+	for(unsigned int i=0; i<n;++i){
+		std::vector<float> v(m,alpha);
+		mask.push_back(v);	
+	}
+	return mask;
+}
+
+

@@ -34,7 +34,7 @@ class ImageStack{
 
 		void push(const Image& img, const std::vector<std::vector<float> > &mask);		
 		
-		const Image& getCondensedImage() const {
+		const Image getCondensedImage() const {
 			_condense(); 
 			return _condensedImage; 
 		}

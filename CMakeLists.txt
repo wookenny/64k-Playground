@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.6)
 project(Intro)
 
 #specific compiler settings
-set(CMAKE_CXX_FLAGS "-Os -g -std=c++0x  -lpng -lm -lGL -lGLU -lSDL  ")
+set(CMAKE_CXX_FLAGS "-Os -pedantic -Wall -std=c++0x  -lpng -lm -lGL -lGLU -lSDL  ")
 
 
 

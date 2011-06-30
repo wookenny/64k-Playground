@@ -2,7 +2,7 @@
 
 #include <string>
 
-typedef unsigned char real;
+typedef float real;
 
 class Color{
 
@@ -51,6 +51,15 @@ public:
 	Color operator/(real a) const;
 	Color& operator/=(const Color& c);
 	Color& operator/=(real a);
+
+	static Color BLACK; 
+	static Color WHITE; 
+	static Color RED; 
+	static Color GREEN; 
+	static Color BLUE;
+	static Color VIOLET;
+	static Color YELLOW;
+
 	
 };
 

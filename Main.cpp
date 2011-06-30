@@ -20,10 +20,16 @@ void gl_init(){
 
 
 	/** Here comes my image creation process **/
-	Image base = Image::createSolidColor(imageWidth,imageHeight, Color(255,255,0) );
-	std::cout<< "Image build" <<std::endl;
+	Image base = Image::createCheckersBoard(imageWidth,imageHeight,Color::RED,Color::YELLOW,64,64);
+	Image layer1 = Image::createCheckersBoard(imageWidth,imageHeight,Color::BLACK,Color::WHITE,128,128);
+	Image layer2 = Image::createCheckersBoard(imageWidth,imageHeight,Color::BLACK,Color::WHITE,8,8);
+	std::vector<std::vector<float> > mask1 = Image::createSolidColorMask(imageWidth,imageHeight,.5);
+
+
 	ImageStack stack(base);
-	std::cout<< "Stack building" <<std::endl;
+	stack.push(layer1, mask1);
+	stack.push(layer2,Image::createSolidColorMask(imageWidth,imageHeight,.1));
+
 	//add to stack
 	img = stack.getCondensedImage();
 	/** Here it ends and i copy iot to an array **/
@@ -33,6 +39,7 @@ void gl_init(){
 	for(unsigned int i = 0; i<imageWidth;++i)
 		for(unsigned int j = 0; j<imageHeight;++j){
 			image[i][j][0] = img.at(i,j).getRed();
+			//std::cout<<img.at(i,j)<<std::endl;
 			image[i][j][1] = img.at(i,j).getGreen();
 			image[i][j][2] = img.at(i,j).getBlue(); 		
 		}
@@ -157,19 +164,19 @@ int main(int argc, char **argv)
 	glTranslated(-200,-300,0);
 	 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glBegin( GL_QUADS );
-      		glColor3f(1,0,0);   glTexCoord2f(1.0f, 0.0f); glVertex3f(100,200,0);
-		glColor3f(0,1,0);   glTexCoord2f(0.0f, 1.0f); glVertex3f(100,400,0);
-   		glColor3f(0,0,1);   glTexCoord2f(1.0f, 1.0f); glVertex3f(300,400,0);  
-		glColor3f(0,1,0);   glTexCoord2f(0.0f, 0.0f); glVertex3f(300,200,0);
+      		glTexCoord2f(0.0f, 0.0f); glVertex3f(100,200,0);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(100,400,0);
+   		glTexCoord2f(1.0f, 1.0f); glVertex3f(300,400,0);  
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(300,200,0);
 	glEnd(); 
 
 	//draw an unrotated quad
 	glLoadIdentity();
  	glBegin( GL_QUADS );
-      		glColor3f(1,0,0);   glTexCoord2f(1.0f, 0.0f); glVertex3f(100+400,200,0);
-		glColor3f(0,1,0);   glTexCoord2f(0.0f, 1.0f); glVertex3f(100+400,400,0);
-   		glColor3f(0,0,1);   glTexCoord2f(1.0f, 1.0f); glVertex3f(300+400,400,0);  
-		glColor3f(0,1,0);   glTexCoord2f(0.0f, 0.0f); glVertex3f(300+400,200,0);
+      		glTexCoord2f(0.0f, 0.0f); glVertex3f(100+400,200,0);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(100+400,400,0);
+   		glTexCoord2f(1.0f, 1.0f); glVertex3f(300+400,400,0);  
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(300+400,200,0);
 	glEnd();
 
     SDL_GL_SwapBuffers(); // Bildbuffer vertauschen (als Letztes)

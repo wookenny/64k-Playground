@@ -38,8 +38,8 @@ void ImageStack::_condense() const{
 	foreach( const NastyStackElement& elem, _stack ){
 		const Image& currImg = std::get<0>(elem);
 		const std::vector<std::vector<float> >& currMask = std::get<1>(elem);
-		for(unsigned int i = 0; i < _baseImage.getWidth(); ++i)
-			for(unsigned int j = 0; j < _baseImage.getHeight(); ++j){
+		for(unsigned int i = 0; i < _condensedImage.getWidth(); ++i)
+			for(unsigned int j = 0; j < _condensedImage.getHeight(); ++j){
 				//add the color with the current alphamask
 				_condensedImage.at(i,j) =  currMask[i][j] * currImg.at(i,j) 
 							+  (1-currMask[i][j]) * _condensedImage.at(i,j) ;
@@ -49,5 +49,4 @@ void ImageStack::_condense() const{
 
 	//all done, get ready
 	_condensed = true;
-
 }
