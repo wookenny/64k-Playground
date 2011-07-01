@@ -1,5 +1,5 @@
 #include "Image.h"
-
+#include <cmath>
 
 //definition of static member variable
 real Image::_gamma = 2.2;
@@ -130,8 +130,18 @@ Image Image::createCheckersBoard(unsigned int n, unsigned int m,
 Image Image::createLinearGradient(unsigned int n, unsigned int m, unsigned int x1, unsigned int y1, 
 					unsigned int x2, unsigned int y2, const Color &c1, const Color &c2){
 	Image img = Image(n,m);
+	float dirx = x2 - x1, diry = y2 - y1;
+	float len = sqrt(dirx*dirx + diry*diry);
+	dirx/=len; diry/=len;
+	
+	float normalx = diry, normaly = -dirx;
+	
+
 	for(unsigned int i=0; i<img._data.size();++i)
 		for(unsigned int j=0; j<img._data.at(i).size();++j){
+			//intersectionpoints of lines: current+direction 
+		    // and two point +normal 
+						
 			img.at(i,j) = c1;
 		}
 	return img;
