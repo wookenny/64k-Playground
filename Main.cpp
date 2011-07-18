@@ -19,17 +19,21 @@ void gl_init(){
 	Image img;
 
 	/** Here comes my image creation process **/
-	Image base = Image::createCheckersBoard(imageWidth,imageHeight,Color::RED,Color::YELLOW,64,64);
-	base.rotate(3.14159/4);	
-	//Image layer1 = Image::createCheckersBoard(imageWidth,imageHeight,Color::BLACK,Color::WHITE,128,128);
-	//Image layer2 = Image::createCheckersBoard(imageWidth,imageHeight,Color::BLACK,Color::WHITE,8,8);
-
+	Image_ptr base_ptr = Image_ptr(new Image(
+						Image::createCheckersBoard(imageWidth,imageHeight,Color::RED,Color::YELLOW,64,64)
+						));
+	Image_ptr layer1 = Image_ptr(new Image(
+						Image::createCheckersBoard(imageWidth,imageHeight,Color::BLACK,Color::WHITE,128,128)
+						));
+	Image_ptr layer2 = Image_ptr(new Image(
+						Image::createCheckersBoard(imageWidth,imageHeight,Color::BLACK,Color::WHITE,8,8)
+						));
+	layer2->rotate(Image::PI/8);	
 	std::vector<std::vector<float> > mask1 = Image::createSolidColorMask(imageWidth,imageHeight,.5);
 
-
-	ImageStack stack(base);
-	//stack.push(layer1, mask1);
-	//stack.push(layer2,Image::createSolidColorMask(imageWidth,imageHeight,.1));
+	ImageStack stack( base_ptr );
+	stack.push(layer1, mask1);
+	stack.push(layer2,Image::createSolidColorMask(imageWidth,imageHeight,.1));
 
 	//add to stack
 	img = stack.getCondensedImage();

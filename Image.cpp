@@ -4,9 +4,9 @@
 
 //definition of static member variable
 real Image::_gamma = 2.2;
+const real Image::PI  = 3.1415926535897932384626433832795028;
 
 Image::Image(unsigned int width, unsigned int height){
-
 	_data = std::vector<std::vector<Color> >( width, std::vector<Color>( height, Color(0,0,0) ) );
 }
 
@@ -164,8 +164,25 @@ Image Image::createCheckersBoard(unsigned int n, unsigned int m,
 	return img;
 }
 
+//this is the simple version: gradient from a to b, where a = x1,y and b = x2,y
+Image Image::createLinearGradient(unsigned int n, unsigned int m, unsigned int x1, unsigned int x2,
+					const Color &c1, const Color &c2){
+	Image img = Image(n,m);
+	for(unsigned int i=0; i<img._data.size();++i){
+		Color act_col = c1;
+		if(i>=x2) act_col = c2;
+		if( x1<i and i<x2)//linear gradient
+			act_col	= c1*(1-(i-x1)/(x2-x1)) + c2*((i-x1)/(x2-x1));
+		for(unsigned int j=0; j<img._data.at(i).size();++j){
+			img.at(i,j) = act_col;
+		}
+	}
+	return img;
+}
+
 Image Image::createLinearGradient(unsigned int n, unsigned int m, unsigned int x1, unsigned int y1, 
 					unsigned int x2, unsigned int y2, const Color &c1, const Color &c2){
+	//TODO: call the simpler method in a bigger version, rotate it, and crop a desired snapshot
 	Image img = Image(n,m);
 	float dirx = x2 - x1, diry = y2 - y1;
 	float len = sqrt(dirx*dirx + diry*diry);

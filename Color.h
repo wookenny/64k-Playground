@@ -52,13 +52,13 @@ public:
 	Color& operator/=(const Color& c);
 	Color& operator/=(real a);
 
-	static Color BLACK; 
-	static Color WHITE; 
-	static Color RED; 
-	static Color GREEN; 
-	static Color BLUE;
-	static Color VIOLET;
-	static Color YELLOW;
+	static const Color BLACK; 
+	static const Color WHITE; 
+	static const Color RED; 
+	static const Color GREEN; 
+	static const Color BLUE;
+	static const Color VIOLET;
+	static const Color YELLOW;
 
 	
 };

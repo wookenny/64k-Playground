@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <string>
+#include <memory>
 #include "Color.h"
 
 class Image;
@@ -15,6 +16,8 @@ class ImageProducer{
 		virtual uint getHeight() const = 0;
 };	
 
+typedef std::shared_ptr<ImageProducer> ImageProducer_ptr;
+typedef std::shared_ptr<Image> Image_ptr;
 
 class Image: public ImageProducer{
 
@@ -25,6 +28,8 @@ private:
 	void exposureCorrection();
 
 public:	
+
+	static const real PI;
 	static real _gamma;
 
 	//constructors
@@ -73,7 +78,10 @@ public:
 	static Image createSolidColor(unsigned int n = 800, unsigned int m = 600, const Color &c = Color::BLACK);
 	static Image createCheckersBoard(unsigned int n = 800, unsigned int m = 600, 
 					const Color &c1 = Color(0,0,0), const Color &c2 = Color::WHITE,
-					unsigned int period1 = 100, unsigned int period2 = 100 );	
+					unsigned int period1 = 100, unsigned int period2 = 100 );
+	static Image createLinearGradient(unsigned int n = 800, unsigned int m = 600, 
+					unsigned int x1 = 0, unsigned int x2 = 0,
+					const Color &c1 = Color::WHITE, const Color &c2 = Color::BLACK);	
 	static Image createLinearGradient(unsigned int n = 800, unsigned int m = 600, 
 					unsigned int x1 = 0, unsigned int y1 = 0, 
 					unsigned int x2 = 0, unsigned int y2 = 100,

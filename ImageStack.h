@@ -4,12 +4,16 @@
 #include <tuple>
 #include "Image.h"
 
+class ImageStack;
+typedef std::shared_ptr<ImageStack> ImageStack_ptr;
+
 class ImageStack : public ImageProducer{
-		
+	
+	
 	private:
 		
-		std::vector< std::tuple<ImageProducer,  std::vector<std::vector<float> > > > _stack;
-		ImageProducer _baseImage;
+		std::vector< std::tuple<ImageProducer_ptr,  std::vector<std::vector<float> > > > _stack;
+		ImageProducer_ptr _baseImage;
 		
 	
 		mutable bool _condensed;
@@ -18,12 +22,12 @@ class ImageStack : public ImageProducer{
 		void _condense() const;
 	public: 
 		
-		ImageStack(const Image& base):_baseImage(base),_condensed(false){ }
-		~ImageStack(){}
+		ImageStack(ImageProducer_ptr base):_baseImage(base),_condensed(false){ }
+		~ImageStack(){ }
 
 		//getter
-		unsigned int getWidth() const{ return _baseImage.getWidth(); }	
-		unsigned int getHeight() const{ return _baseImage.getHeight(); }
+		unsigned int getWidth() const{ return _baseImage->getWidth(); }	
+		unsigned int getHeight() const{ return _baseImage->getHeight(); }
 
 		const Color& at(unsigned int i, unsigned int j) const{ _condense(); return _condensedImage.at(i,j);}
 	
@@ -33,7 +37,7 @@ class ImageStack : public ImageProducer{
 				int nj  =  (int)(j*getHeight()) % getHeight();
 				return _condensedImage.at(ni,nj);}
 
-		void push(const ImageProducer& img, const std::vector<std::vector<float> > &mask);		
+		void push(ImageProducer_ptr img, const std::vector<std::vector<float> > &mask);		
 		
 		const Image getCondensedImage() const {
 			_condense(); 
@@ -44,5 +48,4 @@ class ImageStack : public ImageProducer{
 		Image produceImage(){ return getCondensedImage(); }
 };
 
-//TODO: ImageStack Elemets can be imagesStacks itself!!! -> this builds trees immediateley
-//TODO: crop to smaller size if two succsessive images are not fiotting!	
+//TODO: crop to smaller size if two succsessive images are not fitting!	
