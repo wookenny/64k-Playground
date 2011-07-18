@@ -26,14 +26,14 @@ void gl_init(){
 						Image::createCheckersBoard(imageWidth,imageHeight,Color::BLACK,Color::WHITE,128,128)
 						));
 	Image_ptr layer2 = Image_ptr(new Image(
-						Image::createCheckersBoard(imageWidth,imageHeight,Color::BLACK,Color::WHITE,8,8)
+						Image::createCheckersBoard(2*imageWidth,2*imageHeight,Color::BLACK,Color::WHITE,8,8)
 						));
 	layer2->rotate(Image::PI/8);	
 	std::vector<std::vector<float> > mask1 = Image::createSolidColorMask(imageWidth,imageHeight,.5);
 
 	ImageStack stack( base_ptr );
 	stack.push(layer1, mask1);
-	stack.push(layer2,Image::createSolidColorMask(imageWidth,imageHeight,.1));
+	stack.push(layer2,Image::createSolidColorMask(2*imageWidth,2*imageHeight,.1));
 
 	//add to stack
 	img = stack.getCondensedImage();
