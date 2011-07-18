@@ -3,11 +3,20 @@
 #include <string>
 #include <iostream>
 #include <string>
-
 #include "Color.h"
 
+class Image;
 
-class Image{
+class ImageProducer{
+	public:
+		virtual ~ImageProducer() {};
+		virtual Image produceImage() = 0;
+		virtual uint getWidth() const = 0;
+		virtual uint getHeight() const = 0;
+};	
+
+
+class Image: public ImageProducer{
 
 private:
 	std::vector<std::vector<Color> > _data;	
@@ -22,7 +31,7 @@ public:
 	Image(unsigned int width = 800,unsigned int height = 600);
 	Image(const Image& img){ _data = img._data; }
 
-	Image(const std::string file);
+	virtual ~Image();
 
 	//getter
 	unsigned int getWidth() const{ return _data.size(); }	
@@ -46,9 +55,17 @@ public:
 			int nj  =  (int)(j*_data[0].size())%_data[0].size();
 			return _data[ni][nj];}
 
+	//interface method:
+	Image produceImage(){ return *this; }
+
 	//misc methods	
 	void save(const std::string& filename);
 	std::vector<std::vector<bool> > findEdges() const;
+
+	//crop, rotate, scale
+	void crop(uint x1, uint y1, uint x2, uint y2);
+	void rotate(float angle);
+	void scale(float s);
 
 	//static image factory methods:
 	//solid, gradient, random, simplex noise, perlin noise, circles, rectangles, 

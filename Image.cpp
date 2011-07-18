@@ -1,5 +1,6 @@
 #include "Image.h"
 #include <cmath>
+#include <cassert>
 
 //definition of static member variable
 real Image::_gamma = 2.2;
@@ -9,25 +10,7 @@ Image::Image(unsigned int width, unsigned int height){
 	_data = std::vector<std::vector<Color> >( width, std::vector<Color>( height, Color(0,0,0) ) );
 }
 
-
-Image::Image(const std::string file){
-	/*	
-	img.readfromfile( file.c_str() );
-
-	_data = std::vector<std::vector<Color> >( img.getwidth() ,std::vector<Color>( img.getheight(), Color(0,0,0) ) );	
-	
-	
-	for(unsigned int i=0; i<_data.size();++i){
-		for(unsigned int j=0; j<_data.at(i).size();++j){
-			Color c(real(img.read(i+1,j+1,1))/65536.,
-					real(img.read(i+1,j+1,2))/65536.,
-					real(img.read(i+1,j+1,3))/65536. );
-			_data.at(i).at(j) = c;
-		}
-	}
-	*/
-}
-
+Image::~Image(){ }
 
 void Image::gammaCorrection(){
 	for(unsigned int i=0; i<_data.size();++i)
@@ -56,6 +39,60 @@ void Image::save(const std::string& filename){
 	writer.write_png();
 	*/
 }
+
+
+void Image::crop(uint x1, uint y1, uint x2, uint y2){
+	assert(x1<x2);
+	assert(y1<y2);
+	assert(x2 < getWidth());
+	assert(y2 < getHeight());
+	
+	std::vector<std::vector<Color> > newData( x2-x1 , std::vector<Color>( y2-y1, Color(0,0,0) ) );
+	//copy data in image
+	for(uint i=0;i<x2-x1;++i)
+		for(uint j=0;j<y2-y1;++j)
+			newData.at(i).at(j) = _data.at(x1+i).at(y1+j);
+	//save the new image
+	_data = newData;	
+}
+
+//help function for rotation or scaling:
+Color interpolate(const std::vector<std::vector<Color> > &img, real x, real y){
+	//out of bounds?
+	if(x<0 or y<0 or x>=img.size() or y>=img.at(0).size())
+		return Color::BLACK;
+	
+	//interpolate the image
+	//nearest neighbor
+	uint i = x;
+	uint j = y;
+	return img.at(i).at(j);
+	//bilinear
+	
+}
+
+void Image::rotate(float angle){
+	real centerX = getWidth()/2., centerY = getHeight()/2.; 
+	std::vector<std::vector<Color> >  copy = _data;	
+	for(uint i=0; i<getWidth(); ++i)
+		for(uint j=0; j<getHeight(); ++j){
+			float new_x = cos(angle)*(i-centerX)-sin(angle)*(j-centerY)+centerX; 
+			float new_y = sin(angle)*(i-centerX)+cos(angle)*(j-centerY)+centerY;
+			_data.at(i).at(j) = interpolate(copy, new_x,new_y);
+		}
+}
+
+
+void Image::scale(float s){
+	std::vector<std::vector<Color> > newData( s*getWidth() , std::vector<Color>( s*getHeight(), Color(0,0,0) ) );
+	//interpolate each pixel	
+	for(uint i=0; i<newData.size(); ++i)
+		for(uint j=0; j<newData.at(0).size(); ++j){
+			newData.at(i).at(j) = interpolate(_data, i/s, j/s);	
+		}
+	//copy it
+	_data = newData; 
+}	
 
 
 std::vector<std::vector<bool> > Image::findEdges() const{
@@ -134,7 +171,7 @@ Image Image::createLinearGradient(unsigned int n, unsigned int m, unsigned int x
 	float len = sqrt(dirx*dirx + diry*diry);
 	dirx/=len; diry/=len;
 	
-	float normalx = diry, normaly = -dirx;
+	//float normalx = diry, normaly = -dirx;
 	
 
 	for(unsigned int i=0; i<img._data.size();++i)

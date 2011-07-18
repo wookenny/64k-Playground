@@ -4,12 +4,12 @@
 #include <tuple>
 #include "Image.h"
 
-class ImageStack{
+class ImageStack : public ImageProducer{
 		
 	private:
 		
-		std::vector< std::tuple<Image,  std::vector<std::vector<float> > > > _stack;
-		Image _baseImage;
+		std::vector< std::tuple<ImageProducer,  std::vector<std::vector<float> > > > _stack;
+		ImageProducer _baseImage;
 		
 	
 		mutable bool _condensed;
@@ -19,6 +19,7 @@ class ImageStack{
 	public: 
 		
 		ImageStack(const Image& base):_baseImage(base),_condensed(false){ }
+		~ImageStack(){}
 
 		//getter
 		unsigned int getWidth() const{ return _baseImage.getWidth(); }	
@@ -32,10 +33,16 @@ class ImageStack{
 				int nj  =  (int)(j*getHeight()) % getHeight();
 				return _condensedImage.at(ni,nj);}
 
-		void push(const Image& img, const std::vector<std::vector<float> > &mask);		
+		void push(const ImageProducer& img, const std::vector<std::vector<float> > &mask);		
 		
 		const Image getCondensedImage() const {
 			_condense(); 
 			return _condensedImage; 
 		}
+
+		//interface method
+		Image produceImage(){ return getCondensedImage(); }
 };
+
+//TODO: ImageStack Elemets can be imagesStacks itself!!! -> this builds trees immediateley
+//TODO: crop to smaller size if two succsessive images are not fiotting!	

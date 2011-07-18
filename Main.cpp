@@ -8,7 +8,7 @@
 
 #define MSEC_FRAMES 17/* 60 FPS(~17 milliseconds between frames) is enough, '0' will disable frame limiter */
 
-unsigned int imageWidth = 512, imageHeight = 512;
+unsigned const int imageWidth = 512, imageHeight = 512;
 
 void gl_init(){
 	glClearColor (0.0, 0.0, 0.0, 0.0);
@@ -18,17 +18,18 @@ void gl_init(){
 	GLubyte image[imageWidth][imageHeight][3];
 	Image img;
 
-
 	/** Here comes my image creation process **/
 	Image base = Image::createCheckersBoard(imageWidth,imageHeight,Color::RED,Color::YELLOW,64,64);
-	Image layer1 = Image::createCheckersBoard(imageWidth,imageHeight,Color::BLACK,Color::WHITE,128,128);
-	Image layer2 = Image::createCheckersBoard(imageWidth,imageHeight,Color::BLACK,Color::WHITE,8,8);
+	base.rotate(3.14159/4);	
+	//Image layer1 = Image::createCheckersBoard(imageWidth,imageHeight,Color::BLACK,Color::WHITE,128,128);
+	//Image layer2 = Image::createCheckersBoard(imageWidth,imageHeight,Color::BLACK,Color::WHITE,8,8);
+
 	std::vector<std::vector<float> > mask1 = Image::createSolidColorMask(imageWidth,imageHeight,.5);
 
 
 	ImageStack stack(base);
-	stack.push(layer1, mask1);
-	stack.push(layer2,Image::createSolidColorMask(imageWidth,imageHeight,.1));
+	//stack.push(layer1, mask1);
+	//stack.push(layer2,Image::createSolidColorMask(imageWidth,imageHeight,.1));
 
 	//add to stack
 	img = stack.getCondensedImage();
@@ -39,7 +40,6 @@ void gl_init(){
 	for(unsigned int i = 0; i<imageWidth;++i)
 		for(unsigned int j = 0; j<imageHeight;++j){
 			image[i][j][0] = img.at(i,j).getRed();
-			//std::cout<<img.at(i,j)<<std::endl;
 			image[i][j][1] = img.at(i,j).getGreen();
 			image[i][j][2] = img.at(i,j).getBlue(); 		
 		}
