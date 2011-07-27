@@ -34,7 +34,7 @@ ADD_EXECUTABLE(Intro ${IntroSources} )
 
 #afterwards:
 # strip Intro && upx -9 Intro
-#ADD_CUSTOM_COMMAND(TARGET Intro
-#		   POST_BUILD
-#		   COMMAND du -bh Intro && upx -9 Intro > /dev/null && du -bh Intro)
+ADD_CUSTOM_COMMAND(TARGET Intro
+		   POST_BUILD
+		   COMMAND du -bh Intro && strip Intro && upx -9 Intro > /dev/null && du -bh Intro)
 
