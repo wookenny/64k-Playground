@@ -14,7 +14,7 @@ class ImageProducer{
 		virtual Image produceImage() = 0;
 		virtual uint getWidth() const = 0;
 		virtual uint getHeight() const = 0;
-};	
+};
 
 typedef std::shared_ptr<ImageProducer> ImageProducer_ptr;
 typedef std::shared_ptr<Image> Image_ptr;
@@ -22,12 +22,12 @@ typedef std::shared_ptr<Image> Image_ptr;
 class Image: public ImageProducer{
 
 private:
-	std::vector<std::vector<Color> > _data;	
-	
+	std::vector<std::vector<Color> > _data;
+
 	void gammaCorrection();
 	void exposureCorrection();
 
-public:	
+public:
 
 	static const real PI;
 	static real _gamma;
@@ -39,9 +39,9 @@ public:
 	virtual ~Image();
 
 	//getter
-	unsigned int getWidth() const{ return _data.size(); }	
+	unsigned int getWidth() const{ return _data.size(); }
 	unsigned int getHeight() const{ return _data[0].size(); }
-	static real getGamma() { return _gamma;}	
+	static real getGamma() { return _gamma;}
 
 	//setter
 	static void setGamma(real g){ _gamma = g;}
@@ -49,7 +49,8 @@ public:
 	//setter+getter:
 	const Color& at(unsigned int i, unsigned int j) const{ return _data[i][j];}
 	Color& at(unsigned int i, unsigned int j){ return _data[i][j];}
-	
+
+
 	const Color& relAt(real i, real j) const{
 			int ni  = (int)(i*_data.size())%_data.size();
 			int nj  =  (int)(j*_data[0].size())%_data[0].size();
@@ -63,7 +64,7 @@ public:
 	//interface method:
 	Image produceImage(){ return *this; }
 
-	//misc methods	
+	//misc methods
 	void save(const std::string& filename);
 	std::vector<std::vector<bool> > findEdges() const;
 
@@ -73,22 +74,30 @@ public:
 	void scale(float s);
 
 	//static image factory methods:
-	//solid, gradient, random, simplex noise, perlin noise, circles, rectangles, 
-	//checker board, sinus(linear, radial)	
+	//solid, gradient, random, simplex noise, perlin noise, circles, rectangles,
+	//checker board, sinus(linear, radial)
 	static Image createSolidColor(unsigned int n = 800, unsigned int m = 600, const Color &c = Color::BLACK);
-	static Image createCheckersBoard(unsigned int n = 800, unsigned int m = 600, 
+	static Image createCheckersBoard(unsigned int n = 800, unsigned int m = 600,
 					const Color &c1 = Color(0,0,0), const Color &c2 = Color::WHITE,
 					unsigned int period1 = 100, unsigned int period2 = 100 );
-	static Image createLinearGradient(unsigned int n = 800, unsigned int m = 600, 
+	static Image createLinearGradient(unsigned int n = 800, unsigned int m = 600,
 					unsigned int x1 = 0, unsigned int x2 = 0,
-					const Color &c1 = Color::WHITE, const Color &c2 = Color::BLACK);	
-	static Image createLinearGradient(unsigned int n = 800, unsigned int m = 600, 
-					unsigned int x1 = 0, unsigned int y1 = 0, 
+					const Color &c1 = Color::WHITE, const Color &c2 = Color::BLACK);
+	static Image createLinearGradient(unsigned int n = 800, unsigned int m = 600,
+					unsigned int x1 = 0, unsigned int y1 = 0,
 					unsigned int x2 = 0, unsigned int y2 = 100,
 					const Color &c1 = Color::WHITE, const Color &c2 = Color::BLACK);
+
+	static Image createRandomBicolorNoise(uint n=800, uint m=600,
+						const Color &c1=Color::BLACK, const Color &c2=Color::WHITE);
+
+	static Image createRandomColorNoise(uint n=800, uint m=600);
+
 	//static mask factory methods:
+	static std::vector<std::vector<float> > createMaskFromImage(const Image& , real, real, real);
 	static std::vector<std::vector<float> > createSolidColorMask(unsigned int n = 800, unsigned int m = 600, real alpha = 0.5);
 
 };
 
 //TODO: factory should return a pointer!!
+

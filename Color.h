@@ -3,7 +3,10 @@
 #include <string>
 
 typedef float real;
-
+/**
+* This is a simpole class for colors. All colors are represented by a triple of
+* numbers in the range [0,255].
+**/
 class Color{
 
 
@@ -16,7 +19,7 @@ public:
 	Color(const std::string &str);
 	Color(real r=0, real g=0, real b=0){ _data[0]=r; _data[1]=g; _data[2]=b; }
 	Color(const Color &c){_data[0] = c._data[0]; _data[1] = c._data[1]; _data[2] = c._data[2];}
-	
+
 
 	//getter
 	real getRed() const{ return _data[0];}
@@ -30,7 +33,7 @@ public:
 	void setGreen(real green){ _data[1] = green;}
 	void setBlue(real blue){ _data[2] = blue;}
 
-	// misc methods	
+	// misc methods
 	std::string toString() const;
 	Color& gammaCorrection(real gamma);
 	Color& exposureCorrection(); //map all colors to [0,1]^3
@@ -46,21 +49,21 @@ public:
 	Color operator*(real a) const;
 	Color& operator*=(const Color& c);
 	Color& operator*=(real a);
-	
+
 	Color operator/(const Color& c) const;
 	Color operator/(real a) const;
 	Color& operator/=(const Color& c);
 	Color& operator/=(real a);
 
-	static const Color BLACK; 
-	static const Color WHITE; 
-	static const Color RED; 
-	static const Color GREEN; 
+	static const Color BLACK;
+	static const Color WHITE;
+	static const Color RED;
+	static const Color GREEN;
 	static const Color BLUE;
 	static const Color VIOLET;
 	static const Color YELLOW;
 
-	
+
 };
 
 //global operators
@@ -69,3 +72,4 @@ Color operator*(real a, const Color& c);
 
 //stream operator
 std::ostream &operator<<(std::ostream &stream, Color c);
+

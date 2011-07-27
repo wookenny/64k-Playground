@@ -9,7 +9,7 @@ project(Intro)
 set(CMAKE_CXX_FLAGS "-Os -g -pedantic -Wall -std=c++0x  -lpng -lm -lGL -lGLU -lSDL  ")
 set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 # collect all sources (copy from 'ls -1 *.h *.cpp')
-SET(IntroSources 
+SET(IntroSources
 Color.cpp
 Color.h
 Image.cpp
@@ -29,11 +29,12 @@ MESSAGE( STATUS "${CMAKE_CXX_FLAGS}" )
 MESSAGE( STATUS "-------------------------------------------------------------------------------" )
 MESSAGE( STATUS )
 
-#define executable 
+#define executable
 ADD_EXECUTABLE(Intro ${IntroSources} )
 
 #afterwards:
-# strip Intro && upx -9 Intro 
+# strip Intro && upx -9 Intro
 #ADD_CUSTOM_COMMAND(TARGET Intro
 #		   POST_BUILD
 #		   COMMAND du -bh Intro && upx -9 Intro > /dev/null && du -bh Intro)
+
