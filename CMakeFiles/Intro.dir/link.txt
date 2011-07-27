@@ -1,1 +1,0 @@
-/usr/bin/c++   -Os -g -pedantic -Wall -std=c++0x  -lpng -lm -lGL -lGLU -lSDL     CMakeFiles/Intro.dir/Color.cpp.o CMakeFiles/Intro.dir/Image.cpp.o CMakeFiles/Intro.dir/ImageStack.cpp.o CMakeFiles/Intro.dir/Main.cpp.o CMakeFiles/Intro.dir/ApplicationWindow.cpp.o  -o Intro  
