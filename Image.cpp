@@ -2,6 +2,7 @@
 #include <cmath>
 #include <cassert>
 #include <random>
+#include "PerlinNoise3.h"
 
 //definition of static member variable
 real Image::_gamma = 2.2;
@@ -230,6 +231,29 @@ Image Image::createRandomColorNoise(unsigned int n, unsigned int m){
 	return img;
 }
 
+Image Image::createPerlinNoise(uint n, uint m, const Color &c1, const Color &c2,real scale, real time){
+	Image img = Image(n,m);
+
+	PerlinNoise3<2048> p;
+	double x_offset = 0.5, y_offset = 0.5, t_offset = 0.5;
+	double maxSize = std::max(n,m);
+ 	double x_increment = (n/maxSize)*p.getSize()/n;
+ 	x_increment*=scale;
+ 	double y_increment = (m/maxSize)*p.getSize()/m;
+	y_increment*=scale;
+
+	for(unsigned int i=0; i<img._data.size();++i)
+		for(unsigned int j=0; j<img._data.at(i).size();++j){
+			double noise = p.noise(i*x_increment+x_offset,
+									j*y_increment+y_offset,
+									time+t_offset);
+			double lambda = (1+noise)/2;//scale from [-1,1] to [0,1]
+			img.at(i,j) = lambda*c1 + (1-lambda)*c2;
+		}
+
+	return img;
+}
+
 /*****------------- Mask Factory Methods -----------------------------------*****/
 std::vector<std::vector<float> > Image::createMaskFromImage(const Image& img, real x, real y, real z){
 	uint n = img.getWidth(), m = img.getHeight();
@@ -238,13 +262,16 @@ std::vector<std::vector<float> > Image::createMaskFromImage(const Image& img, re
 		std::vector<float> v(m,0.);
 		mask.push_back(v);
 	}
+
 	//fill in color
 	for(unsigned int i=0; i<n;++i)
 		for(unsigned int j=0; j<m;++j){
-			mask[n][m]  = x*img.at(i,j).getRed() + y*img.at(i,j).getGreen() + z*img.at(i,j).getBlue();
-			mask[n][m] /= (x+y+z)!=0?x+y+z:1.;//maybe they sum up to one.....
-			mask[n][m] /= 255;
+			mask[i][j] = x*img.at(i,j).getRed() + y*img.at(i,j).getGreen() + z*img.at(i,j).getBlue();
+			mask[i][j] /= (x+y+z)!=0?x+y+z:1.;//maybe they sum up to one.....
+			mask[i][j] /= 255;
 		}
+
+
 	return mask;
 }
 

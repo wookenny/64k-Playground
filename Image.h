@@ -93,11 +93,15 @@ public:
 
 	static Image createRandomColorNoise(uint n=800, uint m=600);
 
+	static Image createPerlinNoise(uint n=800, uint m=600,
+									const Color &c1=Color::BLACK, const Color &c2=Color::WHITE,
+									real scale=1., real time=0.);
+
 	//static mask factory methods:
 	static std::vector<std::vector<float> > createMaskFromImage(const Image& , real, real, real);
 	static std::vector<std::vector<float> > createSolidColorMask(unsigned int n = 800, unsigned int m = 600, real alpha = 0.5);
 
 };
 
-//TODO: factory should return a pointer!!
+//TODO: factory should return a pointer!! OR modify a given image
 

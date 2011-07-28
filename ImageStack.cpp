@@ -12,14 +12,14 @@ void ImageStack::push(ImageProducer_ptr img, const std::vector<std::vector<float
 	if( mask.size() != img->getWidth() )
 		assert(false);//mask and image doesn't fit
 	for(unsigned int i = 0;  i < mask.size(); ++i ){
-		if( mask.at(i).size() != img->getHeight() ) 
-			assert(false);//new mask does not fit to the base image!	
+		if( mask.at(i).size() != img->getHeight() )
+			assert(false);//new mask does not fit to the base image!
 		for(unsigned int j = 0;  j < mask.at(i).size(); ++j ){
 			if( mask.at(i).at(j) < 0 or 1 < mask.at(i).at(j) )
-				assert(false); //mask is not in the right range!			
-		}	
+				assert(false); //mask is not in the right range!
+		}
 	}
-	
+
 	//add image to the stack, 'cause everything seems to be ok!
 	_stack.push_back( std::make_tuple(img,mask) );
 	_condensed = false;
@@ -31,15 +31,15 @@ void ImageStack::_condense() const{
 	//don't do it twice
 	if (_condensed) return;
 
-	//copy image 
+	//copy image
 	_condensedImage = _baseImage->produceImage();
 
-	//add all 
+	//add all
 	foreach( const NastyStackElement& elem, _stack ){
 		ImageProducer_ptr currImg = std::get<0>(elem);
 		const std::vector<std::vector<float> >& currMask = std::get<1>(elem);
 		Image pImg = currImg->produceImage();
-	
+
 		//crop to the right dimension:
 		//TODO: sehr genau aufpassen: was wenn beide bilder je einmal das groessere/kleinere ist?
 		uint w = _condensedImage.getWidth(),h = _condensedImage.getHeight();
@@ -54,14 +54,15 @@ void ImageStack::_condense() const{
 		for(unsigned int i = 0; i < _condensedImage.getWidth(); ++i)
 			for(unsigned int j = 0; j < _condensedImage.getHeight(); ++j){
 				//add the color with the current alphamask
-				_condensedImage.at(i,j) =  currMask[i+x_offset][j+y_offset] * 
-											pImg.at(i+x_offset,j+y_offset) 
+				_condensedImage.at(i,j) =  currMask[i+x_offset][j+y_offset] *
+											pImg.at(i+x_offset,j+y_offset)
 												+  (1-currMask[i+x_offset][j+y_offset])
 											* _condensedImage.at(i,j) ;
-			
+
 			}
 	}
 
 	//all done, get ready
 	_condensed = true;
 }
+
